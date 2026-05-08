@@ -1,8 +1,8 @@
 /*
 Name: Salma Abuzaher
 Date Created: 02/26/2026
-Date Modified: 03/29/2026
-Purpose: JS for Homework 3 Patient Registration Form
+Date Modified: 05/07/2026
+Purpose: JS for Homework 4 Patient Registration Form
 */
 
 //dynamic date code
@@ -479,84 +479,89 @@ function getCookie(name) {
 
 var inputs = [
   {id:"fname", cookieName: "firstName"},
-  {id:"mname", cookieName: "middleInitial"},
-  {id:"lname", cookieName: "lastName"},
-  {id:"dob", cookieName: "dob"},
-  {id:"ssn", cookieName: "ssn"},
-  {id:"address1", cookieName: "address1"},
-  {id:"city", cookieName: "city"},
-  {id:"zipcode", cookieName: "zipCode"},
-  {id:"email", cookieName: "email"},
-  {id:"phonenum", cookieName: "phone"},
-  {id:"username", cookieName: "userName"},
+  {id:"mname"},
+  {id:"lname"},
+  {id:"dob"},
+  {id:"address1"},
+  {id:"address2"},
+  {id:"city"},
+  {id:"zipcode"},
+  {id:"email"},
+  {id:"phonenum"},
+  {id:"username"},
 ];
 
+// Save fields to localStorage as user leaves each field (except fname which uses cookie)
 inputs.forEach(function (input) {
     var inputElement = document.getElementById(input.id);
+    if (!inputElement) return;
 
-    // Prefill input fields
-    var cookieValue = getCookie(input.cookieName);
-    if (cookieValue !== "") {
-        inputElement.value = cookieValue;
+    // Prefill from localStorage (or cookie for fname)
+    if (input.cookieName === "firstName") {
+        var cookieValue = getCookie("firstName");
+        if (cookieValue !== "") inputElement.value = cookieValue;
+    } else {
+        var saved = localStorage.getItem(input.id);
+        if (saved) inputElement.value = saved;
     }
 
-    // Set a cookie when the input field changes
-    inputElement.addEventListener("input", function () {
-        setCookie(input.cookieName, inputElement.value, 30);
+    // Save to localStorage on blur (cookie for fname only)
+    inputElement.addEventListener("blur", function () {
+        if (input.cookieName === "firstName") {
+            setCookie("firstName", inputElement.value, 2); // 48 hours
+        } else {
+            localStorage.setItem(input.id, inputElement.value);
+        }
     });
 });
 
-//greet the user with name and message if cookie is set
+// Greet the user
 var firstName = getCookie("firstName");
 if (firstName !== "") {
-    document.getElementById("welcome1").innerHTML = "Welcome back, " + firstName + "!<br>";
+    document.getElementById("welcome1").innerHTML = "Welcome back, " + firstName + "!";
     document.getElementById("welcome2").innerHTML =
-        "<a href='#' id='new-user'>Not " + firstName + "? Click here to start a new form.</a>";
+        "<a href='#' id='new-user'>Not " + firstName + "? Click here to start as a new user.</a>";
 
     document.getElementById("new-user").addEventListener("click", function () {
-        inputs.forEach(function (input) {
-            setCookie(input.cookieName, "", -1);
-        });
+        // Clear cookie and localStorage
+        setCookie("firstName", "", -1);
+        localStorage.clear();
         location.reload();
     });
+} else {
+    document.getElementById("welcome1").innerHTML = "Welcome, New User!";
 }
 
-//toggles cookie storage based on "Remember Me" checkbox
+// Remember Me checkbox
 document.getElementById("remember-me").addEventListener("change", function () {
     const rememberMe = this.checked;
 
     if (!rememberMe) {
-        // If "Remember Me" is unchecked, delete cookies
-        deleteAllCookies();
-        console.log("All cookies deleted because 'Remember Me' is unchecked.");
+        // Uncheck = delete cookie and localStorage
+        setCookie("firstName", "", -1);
+        localStorage.clear();
+        console.log("Cookie and localStorage cleared because Remember Me is unchecked.");
     } else {
-        // If "Remember Me" is checked or rechecked, save cookies
+        // Recheck = save everything back
+        var fname = document.getElementById("fname").value.trim();
+        if (fname !== "") setCookie("firstName", fname, 2);
+
         inputs.forEach(function (input) {
-            const inputElement = document.getElementById(input.id);
-            if (inputElement.value.trim() !== "") {
-                setCookie(input.cookieName, inputElement.value, 30);
+            if (input.cookieName === "firstName") return; // already handled above
+            var el = document.getElementById(input.id);
+            if (el && el.value.trim() !== "") {
+                localStorage.setItem(input.id, el.value);
             }
         });
-        console.log("Cookies saved because 'Remember Me' is checked.");
+        console.log("Cookie and localStorage saved because Remember Me is checked.");
     }
 });
 
-//removes all stored cookies, sets expiration date in past
-function deleteAllCookies() {
-    document.cookie.split(";").forEach(function (cookie) {
-        let eqPos = cookie.indexOf("=");
-        let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
-    });
-}
-
-//ensures cookies are deleted if "Remember Me" is unchecked upon page load
+// On page load, delete cookie and localStorage if Remember Me is unchecked
 document.addEventListener("DOMContentLoaded", function () {
     const rememberMe = document.getElementById("remember-me").checked;
-
     if (!rememberMe) {
-        deleteAllCookies();
+        setCookie("firstName", "", -1);
+        localStorage.clear();
     }
 });
-
-
