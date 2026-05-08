@@ -352,6 +352,27 @@ function confirmPassword() {
 
 //review button 
 function reviewInput() {
+    var labels = {
+        fname: "First Name",
+        mname: "Middle Initial",
+        lname: "Last Name",
+        DOB: "Date of Birth",
+        ssn: "SSN",
+        address1: "Address Line 1",
+        address2: "Address Line 2",
+        city: "City",
+        state: "State",
+        zipcode: "Zip Code",
+        email: "Email",
+        phonenum: "Phone Number",
+        vaccinated: "Vaccinated",
+        primary: "Primary Care Provider",
+        notes: "Reason for Visit",
+        range: "Pain Level",
+        username: "Username",
+        password: "Password",
+        confirm: "Confirm Password"
+    };
     var formcontent = document.getElementById("signup");
     var formoutput = "<table class='output'><tr><th colspan='2'>Review Your Information:</th></tr>";
 
@@ -367,14 +388,14 @@ function reviewInput() {
         switch (datatype) {
             case "checkbox":
                 if (el.checked) {
-                    formoutput += "<tr><td align='right'>" + name + "</td>";
+                    formoutput += "<tr><td align='right'>" + (labels[name] || name) + "</td>";
                     formoutput += "<td class='outputdata'>&#x2713;</td></tr>";
                 }
                 break;
 
             case "radio":
                 if (el.checked) {
-                    formoutput += "<tr><td align='right'>" + name + "</td>";
+                    formoutput += "<tr><td align='right'>" + (labels[name] || name) + "</td>";
                     formoutput += "<td class='outputdata'>" + value + "</td></tr>";
                 }
                 break;
@@ -382,7 +403,7 @@ function reviewInput() {
             case "range":
                 // Only show the slider if the user moved it off the default (0)
                 if (value !== "0") {
-                    formoutput += "<tr><td align='right'>" + name + "</td>";
+                    formoutput += "<tr><td align='right'>" + (labels[name] || name) + "</td>";
                     formoutput += "<td class='outputdata'>" + value + "</td></tr>";
                 }
                 break;
