@@ -411,8 +411,9 @@ function reviewInput() {
             case "button":
             case "submit":
             case "reset":
-                // skip
-                break;
+            case "checkbox":
+            // skip
+            break;
 
             default:
     if (value !== "") {
