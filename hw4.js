@@ -5,6 +5,25 @@ Date Modified: 05/07/2026
 Purpose: JS for Homework 4 Patient Registration Form
 */
 
+
+//load states
+async function loadStates() {
+  try {
+    const response = await fetch("states.json");
+    const states = await response.json();
+    const select = document.getElementById("state");
+    states.forEach(function(state) {
+      const option = document.createElement("option");
+      option.textContent = state;
+      option.value = state;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Error loading states:", error);
+  }
+}
+loadStates();
+
 //dynamic date code
 const d = new Date();
 let text = d.toLocaleDateString();
