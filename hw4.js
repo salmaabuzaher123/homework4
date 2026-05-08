@@ -386,41 +386,30 @@ function reviewInput() {
         if (!name) continue;
 
         switch (datatype) {
-            case "checkbox":
-                if (el.checked) {
-                    formoutput += "<tr><td align='right'>" + (labels[name] || name) + "</td>";
-                    formoutput += "<td class='outputdata'>&#x2713;</td></tr>";
-                }
-                break;
-
-            case "radio":
-                if (el.checked) {
-                    formoutput += "<tr><td align='right'>" + (labels[name] || name) + "</td>";
-                    formoutput += "<td class='outputdata'>" + value + "</td></tr>";
-                }
-                break;
-
-            case "range":
-                // Only show the slider if the user moved it off the default (0)
-                if (value !== "0") {
-                    formoutput += "<tr><td align='right'>" + (labels[name] || name) + "</td>";
-                    formoutput += "<td class='outputdata'>" + value + "</td></tr>";
-                }
-                break;
-
-            case "button":
-            case "submit":
-            case "reset":
-            case "checkbox":
-            // skip
-            break;
-
-            default:
-    if (value !== "") {
-        formoutput += "<tr><td align='right'>" + (labels[name] || name) + "</td>";
-        formoutput += "<td class='outputdata'>" + value + "</td></tr>";
-    }
+    case "checkbox":
+    case "button":
+    case "submit":
+    case "reset":
+        // skip
+        break;
+    case "radio":
+        if (el.checked) {
+            formoutput += "<tr><td align='right'>" + (labels[name] || name) + "</td>";
+            formoutput += "<td class='outputdata'>" + value + "</td></tr>";
         }
+        break;
+    case "range":
+        if (value !== "0") {
+            formoutput += "<tr><td align='right'>" + (labels[name] || name) + "</td>";
+            formoutput += "<td class='outputdata'>" + value + "</td></tr>";
+        }
+        break;
+    default:
+        if (value !== "") {
+            formoutput += "<tr><td align='right'>" + (labels[name] || name) + "</td>";
+            formoutput += "<td class='outputdata'>" + value + "</td></tr>";
+        }
+}
     }
 
     formoutput += "</table>";
