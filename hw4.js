@@ -415,10 +415,10 @@ function reviewInput() {
                 break;
 
             default:
-                if (value !== "") {
-                    formoutput += "<tr><td align='right'>" + name + "</td>";
-                    formoutput += "<td class='outputdata'>" + value + "</td></tr>";
-                }
+    if (value !== "") {
+        formoutput += "<tr><td align='right'>" + (labels[name] || name) + "</td>";
+        formoutput += "<td class='outputdata'>" + value + "</td></tr>";
+    }
         }
     }
 
