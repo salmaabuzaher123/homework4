@@ -356,6 +356,7 @@ function reviewInput() {
         fname: "First Name",
         mname: "Middle Initial",
         lname: "Last Name",
+        psex: "Patient's Sex",
         DOB: "Date of Birth",
         ssn: "SSN",
         address1: "Address Line 1",
